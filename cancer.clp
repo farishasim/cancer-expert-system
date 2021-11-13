@@ -117,21 +117,103 @@
  	(assert (finish 1) )	
 )
 
+; Jika worst-radius <= 16.83
+(defrule ask-radius-error
+	?worst-radius <- (worst-radius ?value)
+	(test (<= ?value 16.83))
+ =>
+ 	(retract ?worst-radius)
+    (printout t "Radius error? ")
+ 	(assert (radius-error (read) ) )	
+)
 
+; Jika radius error > 0.63
+(defrule ask-mean-smoothness
+	?radius-error <- (radius-error ?value)
+	(test (> ?value 0.63))
+ =>
+ 	(retract ?radius-error)
+    (printout t "Mean smoothness? ")
+ 	(assert (mean-smoothness (read) ) )	
+)
 
+; Jika mean smoothness > 0.09
+(defrule mean-smoothness-high
+	?mean-smoothness <- (mean-smoothness ?value)
+	(test (> ?value 0.09))
+=>
+	(retract ?mean-smoothness)
+	(assert (finish 0))
+)
+
+; Jika mean-smoothness <= 0.09
+(defrule mean-smoothness-low
+	?mean-smoothness <- (mean-smoothness ?value)
+	(test (<= ?value 0.09))
+=>
+	(retract ?mean-smoothness)
+	(assert (finish 1))
+)
+
+; Jika worst-radius > 16.83
+(defrule ask-mean-texture
+	?worst-radius <- (worst-radius ?value)
+	(test (> ?value 16.83))
+ =>
+ 	(retract ?worst-radius)
+    (printout t "Mean texture? ")
+ 	(assert (mean-texture (read) ) )	
+)
+
+; Jika mean texture <= 16.19
+(defrule mean-texture-low
+	?mean-texture <- (mean-texture ?value)
+	(test (<= ?value 16.19))
+=>
+	(retract ?mean-texture)
+	(assert (finish 1))
+)
+
+; Jika mean-texture > 16.19
+(defrule ask-concave-points-error
+	?mean-texture <- (mean-texture ?value)
+	(test (> ?value 16.19))
+ =>
+ 	(retract ?mean-texture)
+    (printout t "Concave points error? ")
+ 	(assert (concave-points-error (read) ) )	
+)
+
+; Jika concave points error <= 0.01
+(defrule concave-points-error-low
+	?concave-points-error <- (concave-points-error ?value)
+	(test (<= ?value 0.01))
+=>
+	(retract ?concave-points-error)
+	(assert (finish 0))
+)
+
+; Jika concave points error > 0.01
+(defrule concave-points-error-high
+	?concave-points-error <- (concave-points-error ?value)
+	(test (> ?value 0.01))
+=>
+	(retract ?concave-points-error)
+	(assert (finish 1))
+)
 
 (defrule bad-completed-state 
 	?complete <- (finish ?value)
 	(finish 1)
 	=>
-	 	(retract ?complete)
-	  (printout t "Hasil prediksi = Terprediksi kanker payudara" crlf)
+	(retract ?complete)
+	(printout t "Hasil prediksi = Terprediksi kanker payudara" crlf)
 )
 
 (defrule good-completed-state
 	?complete <- (finish ?value)
 	(finish 0)
 	=>
-		 	(retract ?complete)
-	  (printout t "Hasil prediksi = Terprediksi tidak terkena kanker payudara" crlf)
+	(retract ?complete)
+	(printout t "Hasil prediksi = Terprediksi tidak terkena kanker payudara" crlf)
 )

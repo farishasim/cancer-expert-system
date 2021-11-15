@@ -137,6 +137,16 @@
  	(assert (mean-smoothness (read) ) )	
 )
 
+; Jika radius error <= 0.63
+(defrule ask-worst-texture
+	?radius-error <- (radius-error ?value)
+	(test (<= ?value 0.63))
+ =>
+ 	(retract ?radius-error)
+    (printout t "Worst texture? ")
+ 	(assert (worst-texture (read) ) )	
+)
+
 ; Jika mean smoothness > 0.09
 (defrule mean-smoothness-high
 	?mean-smoothness <- (mean-smoothness ?value)
@@ -216,4 +226,80 @@
 	=>
 	(retract ?complete)
 	(printout t "Hasil prediksi = Terprediksi tidak terkena kanker payudara" crlf)
+)
+
+; Jika worst texture <= 30.15
+(defrule worst-texture-low
+	?worst-texture <- (worst-texture ?value)
+	(test (<= ?value 30.15))
+=>
+	(retract ?worst-texture)
+	(assert (finish 1))
+)
+
+; Jika worst-texture > 30.15
+(defrule ask-worst-area
+	?worst-texture <- (worst-texture ?value)
+	(test (> ?value 16.19))
+ =>
+ 	(retract ?worst-texture)
+    (printout t "Worst area? ")
+ 	(assert (worst-area (read) ) )	
+)
+
+; Jika worst area <= 641.60
+(defrule worst-area-low
+	?worst-area <- (worst-area ?value)
+	(test (<= ?value 641.60))
+=>
+	(retract ?worst-area)
+	(assert (finish 1))
+)
+
+; Jika worst-area > 641.60
+(defrule ask-worst-area
+	?worst-area <- (worst-area ?value)
+	(test (> ?value 641.60))
+ =>
+ 	(retract ?worst-area)
+    (printout t "Worst area? ")
+ 	(assert (mean-radius (read) ) )	
+)
+
+; Jika mean radius <= 13.45
+(defrule ask-mean-radius
+	?mean-radius <- (mean-radius ?value)
+	(test (<= ?value 13.45))
+=>
+	
+	(retract ?mean-radius)
+    (printout t "Mean texture? ")
+ 	(assert (mean-texture (read) ) )	
+)
+
+; Jika mean-radius > 13.45
+(defrule mean-radius-high
+	?mean-radius <- (mean-radius ?value)
+	(test (> ?value 13.45))
+ =>
+ 	(retract ?mean-radius)
+	(assert (finish 1))
+)
+
+; Jika mean texture > 28.79
+(defrule mean-texture-high
+	?mean-texture <- (mean-texture ?value)
+	(test (> ?value 28.79))
+=>
+	(retract ?mean-texture)
+	(assert (finish 1))
+)
+
+; Jika mean-texture <= 28.79
+(defrule mean-texture-low
+	?mean-texture <- (mean-texture ?value)
+	(test (<= ?value 28.79))
+=>
+	(retract ?mean-texture)
+	(assert (finish 0))
 )

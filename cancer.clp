@@ -11,8 +11,30 @@
 =>
     (retract ?mean-concave)
     (printout t "Worst radius? ")
-    (assert (worst-radius (read) ) )	
+	(assert (worst-radius (read) ) )
+	(while (not (integerp ?worst-radius)) do
+	(?fact <- (worst-radius ?value))
+	(retract ?fact)
+    (assert (worst-radius (read))))
+	
 )
+
+; (defmethod ask-question ((?question STRING) (?lower INTEGER) (?upper INTEGER))
+;    (printout t ?question " (" ?lower " - " ?upper") ")
+;    (bind ?answer (read))
+;    (if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
+;    (while (or (not (integerp ?answer))
+;               (< ?answer ?lower)
+;               (> ?answer ?upper)) do
+
+;       (bind ?answer (read)))
+;    ?answer)
+
+; function (?nama-rule)
+; while {
+; 	?input <- (?nama-rule (read))
+; }
+; (assert ?input)
 
 (defrule ask-worst-perimeter
     ?mean-concave <- (mean-concave-point ?value)
@@ -180,6 +202,7 @@
 	?mean-texture <- (mean-texture ?value)
 	(test (<= ?value 16.19))
 =>
+	(printout t "Mean texture low atas")
 	(retract ?mean-texture)
 	(assert (finish 1))
 )
@@ -262,7 +285,7 @@
 	(test (> ?value 641.60))
  =>
  	(retract ?worst-area)
-    (printout t "Worst area? ")
+    (printout t "Mean radius? ")
  	(assert (mean-radius (read) ) )	
 )
 
@@ -271,8 +294,6 @@
 	?mean-radius <- (mean-radius ?value)
 	(test (<= ?value 13.45))
 =>
-	
-	(retract ?mean-radius)
     (printout t "Mean texture? ")
  	(assert (mean-texture (read) ) )	
 )
@@ -288,18 +309,26 @@
 
 ; Jika mean texture > 28.79
 (defrule mean-texture-high
-	?mean-texture <- (mean-texture ?value)
-	(test (> ?value 28.79))
+	?mean-radius <- (mean-radius ?value-1)
+	(test (<= ?value-1 13.45))
+	?mean-texture <- (mean-texture ?value-2)
+	(test (> ?value-2 28.79))
 =>
+	(printout t "Mean texture high ")
+	(retract ?mean-radius)
 	(retract ?mean-texture)
 	(assert (finish 1))
 )
 
 ; Jika mean-texture <= 28.79
 (defrule mean-texture-low-1
-	?mean-texture <- (mean-texture ?value)
-	(test (<= ?value 28.79))
+	?mean-radius <- (mean-radius ?value-1)
+	(test (<= ?value-1 13.45))
+	?mean-texture <- (mean-texture ?value-2)
+	(test (<= ?value-2 28.79))
 =>
+	(printout t "Mean texture low ")
+	(retract ?mean-radius)
 	(retract ?mean-texture)
 	(assert (finish 0))
 )

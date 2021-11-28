@@ -257,7 +257,7 @@
 )
 
 ; Jika worst-area > 641.60
-(defrule ask-worst-area
+(defrule ask-worst-area-1
 	?worst-area <- (worst-area ?value)
 	(test (> ?value 641.60))
  =>
@@ -267,7 +267,7 @@
 )
 
 ; Jika mean radius <= 13.45
-(defrule ask-mean-radius
+(defrule ask-mean-radius-1
 	?mean-radius <- (mean-radius ?value)
 	(test (<= ?value 13.45))
 =>
@@ -296,7 +296,7 @@
 )
 
 ; Jika mean-texture <= 28.79
-(defrule mean-texture-low
+(defrule mean-texture-low-1
 	?mean-texture <- (mean-texture ?value)
 	(test (<= ?value 28.79))
 =>

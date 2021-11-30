@@ -66,12 +66,12 @@
  =>
  	(retract ?worstPerimeter)
 	(bind ?input (ask-question "Worst texture?  "))
- 	(assert (worst-texture ?input ) )	
+ 	(assert (worst-texture-kanan ?input ) )	
 )
 
 ; Jika worst texture < 25.65
 (defrule ask-worst-concave-points
-	?worstTexture <- (worst-texture ?value)
+	?worstTexture <- (worst-texture-kanan ?value)
 	(test (<= ?value 25.65))
  =>
  	(retract ?worstTexture)
@@ -99,7 +99,7 @@
 
 ; Jika worst texture > 25.65
 (defrule ask-perimeter-error
-	?worstTexture <- (worst-texture ?value)
+	?worstTexture <- (worst-texture-kanan ?value)
 	(test (> ?value 25.65))
  =>
  	(retract ?worstTexture)
@@ -171,7 +171,7 @@
  =>
  	(retract ?radius-error)
 	(bind ?input (ask-question "Worst texture?  "))
-	(assert (worst-texture ?input))
+	(assert (worst-texture-kiri ?input))
 )
 
 ; Jika mean smoothness > 0.09
@@ -197,32 +197,27 @@
 	?worst-radius <- (worst-radius ?value)
 	(test (> ?value 16.83))
  =>
-	(bind ?input (ask-question "Mean texture? sini "))
+	(bind ?input (ask-question "Mean texture?"))
  	(assert (mean-texture ?input) )	
+	 (retract ?worst-radius)
 )
 
 ; Jika mean texture <= 16.19
 (defrule mean-texture-low
-	?worst-radius <- (worst-radius ?value2)
-	(test (> ?value2 16.83))
 	?mean-texture <- (mean-texture ?value)
 	(test (<= ?value 16.19))
 =>
 	(printout t "Mean texture low")
-	(retract ?worst-radius)
 	(retract ?mean-texture)
 	(assert (finish 1))
 )
 
 ; Jika mean-texture > 16.19
 (defrule ask-concave-points-error
-	?worst-radius <- (worst-radius ?value2)
-	(test (> ?value2 16.83))
 	?mean-texture <- (mean-texture ?value)
 	(test (> ?value 16.19))
  =>
  	(retract ?mean-texture)
-	(retract ?worst-radius)
 	(bind ?input (ask-question "Concave points error?  "))
  	(assert (concave-points-error ?input) )	
 )
@@ -263,7 +258,7 @@
 
 ; Jika worst texture <= 30.15
 (defrule worst-texture-low
-	?worst-texture <- (worst-texture ?value)
+	?worst-texture <- (worst-texture-kiri ?value)
 	(test (<= ?value 30.15))
 =>
 	(retract ?worst-texture)
@@ -272,7 +267,7 @@
 
 ; Jika worst-texture > 30.15
 (defrule ask-worst-area
-	?worst-texture <- (worst-texture ?value)
+	?worst-texture <- (worst-texture-kiri ?value)
 	(test (> ?value 16.19))
  =>
  	(retract ?worst-texture)

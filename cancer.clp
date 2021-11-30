@@ -14,7 +14,7 @@
 	(bind ?answer (read))
 	(if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
 	(while (not (integerp ?answer)) do
-		(printout t "Value must be integer." crlf)
+		(printout t "Value must be number." crlf)
 		(printout t ?question)
 		(bind ?answer (read)))
 	?answer)
@@ -46,8 +46,8 @@
     (test (> ?value 0.05))
 =>
     (retract ?mean-concave)
-    (printout t "Worst perimeter? ")
-	(assert (worst-perimeter (read) ) )	
+	(bind ?input (ask-question "Worst perimeter?  "))
+	(assert (worst-perimeter ?input))	
 )
 
 ; Jika worst perimeter > 114.45
@@ -65,8 +65,8 @@
 	(test (<= ?value 114.45))
  =>
  	(retract ?worstPerimeter)
-    (printout t "Worst texture? ")
- 	(assert (worst-texture (read) ) )	
+	(bind ?input (ask-question "Worst texture?  "))
+ 	(assert (worst-texture ?input ) )	
 )
 
 ; Jika worst texture < 25.65
@@ -75,8 +75,8 @@
 	(test (<= ?value 25.65))
  =>
  	(retract ?worstTexture)
-    (printout t "Worst concave points? ")
- 	(assert (worst-concave-points (read) ) )	
+	(bind ?input (ask-question "Worst concave points?  "))
+ 	(assert (worst-concave-points ?input ) )	
 )
 
 ; Jika worst concave points <= 0.17
@@ -103,8 +103,8 @@
 	(test (> ?value 25.65))
  =>
  	(retract ?worstTexture)
-    (printout t "Perimeter error? ")
- 	(assert (perimeter-error (read) ) )	
+	(bind ?input (ask-question "Perimeter error?  "))
+ 	(assert (perimeter-error ?input ) )	
 )
 
 ; Jika perimeter error <= 1.56
@@ -113,8 +113,8 @@
 	(test (<= ?value 1.56))
  =>
  	(retract ?perimeterError)
-    (printout t "Mean radius? ")
- 	(assert (mean-radius (read) ) )	
+	(bind ?input (ask-question "Mean radius?  "))
+ 	(assert (mean-radius ?input ) )	
 )
 
 ; Jika perimeter error > 1.56
@@ -150,8 +150,8 @@
 	(test (<= ?value 16.83))
  =>
  	(retract ?worst-radius)
-    (printout t "Radius error? ")
- 	(assert (radius-error (read) ) )	
+	(bind ?input (ask-question "Radius error? "))
+	(assert (radius-error ?input))
 )
 
 ; Jika radius error > 0.63
@@ -160,8 +160,8 @@
 	(test (> ?value 0.63))
  =>
  	(retract ?radius-error)
-    (printout t "Mean smoothness? ")
- 	(assert (mean-smoothness (read) ) )	
+	(bind ?input (ask-question "Mean smoothness?  "))
+	(assert (mean-smoothness ?input))
 )
 
 ; Jika radius error <= 0.63
@@ -170,8 +170,8 @@
 	(test (<= ?value 0.63))
  =>
  	(retract ?radius-error)
-    (printout t "Worst texture? ")
- 	(assert (worst-texture (read) ) )	
+	(bind ?input (ask-question "Worst texture?  "))
+	(assert (worst-texture ?input))
 )
 
 ; Jika mean smoothness > 0.09
@@ -197,29 +197,34 @@
 	?worst-radius <- (worst-radius ?value)
 	(test (> ?value 16.83))
  =>
- 	(retract ?worst-radius)
-    (printout t "Mean texture? ")
- 	(assert (mean-texture (read) ) )	
+	(bind ?input (ask-question "Mean texture? sini "))
+ 	(assert (mean-texture ?input) )	
 )
 
 ; Jika mean texture <= 16.19
 (defrule mean-texture-low
+	?worst-radius <- (worst-radius ?value2)
+	(test (> ?value2 16.83))
 	?mean-texture <- (mean-texture ?value)
 	(test (<= ?value 16.19))
 =>
-	(printout t "Mean texture low atas")
+	(printout t "Mean texture low")
+	(retract ?worst-radius)
 	(retract ?mean-texture)
 	(assert (finish 1))
 )
 
 ; Jika mean-texture > 16.19
 (defrule ask-concave-points-error
+	?worst-radius <- (worst-radius ?value2)
+	(test (> ?value2 16.83))
 	?mean-texture <- (mean-texture ?value)
 	(test (> ?value 16.19))
  =>
  	(retract ?mean-texture)
-    (printout t "Concave points error? ")
- 	(assert (concave-points-error (read) ) )	
+	(retract ?worst-radius)
+	(bind ?input (ask-question "Concave points error?  "))
+ 	(assert (concave-points-error ?input) )	
 )
 
 ; Jika concave points error <= 0.01
@@ -271,8 +276,8 @@
 	(test (> ?value 16.19))
  =>
  	(retract ?worst-texture)
-    (printout t "Worst area? ")
- 	(assert (worst-area (read) ) )	
+	(bind ?input (ask-question "Worst area?  "))
+	(assert (worst-area ?input))
 )
 
 ; Jika worst area <= 641.60
@@ -290,8 +295,8 @@
 	(test (> ?value 641.60))
  =>
  	(retract ?worst-area)
-    (printout t "Mean radius? ")
- 	(assert (mean-radius (read) ) )	
+	(bind ?input (ask-question "Mean radius?  "))
+	(assert (mean-radius ?input))
 )
 
 ; Jika mean radius <= 13.45
@@ -299,8 +304,8 @@
 	?mean-radius <- (mean-radius ?value)
 	(test (<= ?value 13.45))
 =>
-    (printout t "Mean texture? ")
- 	(assert (mean-texture (read) ) )	
+	(bind ?input (ask-question "Mean texture? sana  "))
+	(assert (mean-texture ?input))
 )
 
 ; Jika mean-radius > 13.45
@@ -332,7 +337,7 @@
 	?mean-texture <- (mean-texture ?value-2)
 	(test (<= ?value-2 28.79))
 =>
-	(printout t "Mean texture low ")
+	(printout t "Mean texture low ")	
 	(retract ?mean-radius)
 	(retract ?mean-texture)
 	(assert (finish 0))

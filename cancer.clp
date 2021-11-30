@@ -114,7 +114,7 @@
  =>
  	(retract ?perimeterError)
 	(bind ?input (ask-question "Mean radius?  "))
- 	(assert (mean-radius ?input ) )	
+ 	(assert (mean-radius-kanan ?input ) )	
 )
 
 ; Jika perimeter error > 1.56
@@ -128,7 +128,7 @@
 
 ; Jika mean radius <= 13.34
 (defrule good-mean-radius
-	?meanRadius <- (mean-radius ?value)
+	?meanRadius <- (mean-radius-kanan ?value)
 	(test (<= ?value 13.34))
  =>
  	(retract ?meanRadius)
@@ -137,7 +137,7 @@
 
 ; Jika mean radius <= 13.34
 (defrule bad-mean-radius
-	?meanRadius <- (mean-radius ?value)
+	?meanRadius <- (mean-radius-kanan ?value)
 	(test (> ?value 13.34))
  =>
  	(retract ?meanRadius)
@@ -198,13 +198,13 @@
 	(test (> ?value 16.83))
  =>
 	(bind ?input (ask-question "Mean texture?"))
- 	(assert (mean-texture ?input) )	
+ 	(assert (mean-texture-atas ?input) )	
 	 (retract ?worst-radius)
 )
 
 ; Jika mean texture <= 16.19
 (defrule mean-texture-low
-	?mean-texture <- (mean-texture ?value)
+	?mean-texture <- (mean-texture-atas ?value)
 	(test (<= ?value 16.19))
 =>
 	(printout t "Mean texture low")
@@ -214,7 +214,7 @@
 
 ; Jika mean-texture > 16.19
 (defrule ask-concave-points-error
-	?mean-texture <- (mean-texture ?value)
+	?mean-texture <- (mean-texture-atas ?value)
 	(test (> ?value 16.19))
  =>
  	(retract ?mean-texture)
@@ -291,21 +291,22 @@
  =>
  	(retract ?worst-area)
 	(bind ?input (ask-question "Mean radius?  "))
-	(assert (mean-radius ?input))
+	(assert (mean-radius-kiri ?input))
 )
 
 ; Jika mean radius <= 13.45
 (defrule ask-mean-radius-1
-	?mean-radius <- (mean-radius ?value)
+	?mean-radius <- (mean-radius-kiri ?value)
 	(test (<= ?value 13.45))
 =>
-	(bind ?input (ask-question "Mean texture? sana  "))
-	(assert (mean-texture ?input))
+	(bind ?input (ask-question "Mean texture?"))
+	(assert (mean-texture-bawah ?input))
+	(retract ?mean-radius)
 )
 
 ; Jika mean-radius > 13.45
 (defrule mean-radius-high
-	?mean-radius <- (mean-radius ?value)
+	?mean-radius <- (mean-radius-kiri ?value)
 	(test (> ?value 13.45))
  =>
  	(retract ?mean-radius)
@@ -314,26 +315,18 @@
 
 ; Jika mean texture > 28.79
 (defrule mean-texture-high
-	?mean-radius <- (mean-radius ?value-1)
-	(test (<= ?value-1 13.45))
-	?mean-texture <- (mean-texture ?value-2)
+	?mean-texture <- (mean-texture-bawah ?value-2)
 	(test (> ?value-2 28.79))
 =>
-	(printout t "Mean texture high ")
-	(retract ?mean-radius)
 	(retract ?mean-texture)
 	(assert (finish 1))
 )
 
 ; Jika mean-texture <= 28.79
 (defrule mean-texture-low-1
-	?mean-radius <- (mean-radius ?value-1)
-	(test (<= ?value-1 13.45))
-	?mean-texture <- (mean-texture ?value-2)
+	?mean-texture <- (mean-texture-bawah ?value-2)
 	(test (<= ?value-2 28.79))
 =>
-	(printout t "Mean texture low ")	
-	(retract ?mean-radius)
 	(retract ?mean-texture)
 	(assert (finish 0))
 )

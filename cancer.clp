@@ -1,24 +1,3 @@
-(defrule ask-mean-concave-point
-    (initial-fact)
-=>
-  (printout t "Mean concave point? ")
-    (assert (mean-concave-point (read) ) )	
-)
-
-(defrule ask-worst-radius
-    ?mean-concave <- (mean-concave-point ?value)
-    (test (<= ?value 0.05))
-=>
-    (retract ?mean-concave)
-    (printout t "Worst radius? ")
-	(assert (worst-radius (read) ) )
-	(while (not (integerp ?worst-radius)) do
-	(?fact <- (worst-radius ?value))
-	(retract ?fact)
-    (assert (worst-radius (read))))
-	
-)
-
 ; (defmethod ask-question ((?question STRING) (?lower INTEGER) (?upper INTEGER))
 ;    (printout t ?question " (" ?lower " - " ?upper") ")
 ;    (bind ?answer (read))
@@ -29,6 +8,32 @@
 
 ;       (bind ?answer (read)))
 ;    ?answer)
+
+(defmethod ask-question ((?question STRING))
+	(printout t ?question)
+	(bind ?answer (read))
+	(if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
+	(while (not (integerp ?answer)) do
+		(printout t "Value must be integer." crlf)
+		(printout t ?question)
+		(bind ?answer (read)))
+	?answer)
+
+(defrule ask-mean-concave-point
+	(initial-fact)
+=>
+	(bind ?input (ask-question "Mean concave point? "))
+	(assert (mean-concave-point ?input))	
+)
+
+(defrule ask-worst-radius
+    ?mean-concave <- (mean-concave-point ?value)
+    (test (<= ?value 0.05))
+=>
+    (retract ?mean-concave)
+	(bind ?input (ask-question "Worst radius? "))
+	(assert (worst-radius ?input))	
+)
 
 ; function (?nama-rule)
 ; while {

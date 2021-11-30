@@ -207,7 +207,6 @@
 	?mean-texture <- (mean-texture-atas ?value)
 	(test (<= ?value 16.19))
 =>
-	(printout t "Mean texture low")
 	(retract ?mean-texture)
 	(assert (finish 1))
 )

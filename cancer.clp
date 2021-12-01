@@ -257,7 +257,7 @@
 ; Jika worst-texture > 30.15
 (defrule ask-worst-area
 	?worst-texture <- (worst-texture-kiri ?value)
-	(test (> ?value 16.19))
+	(test (> ?value 30.15))
  =>
  	(retract ?worst-texture)
 	(bind ?input (ask-question "Worst area?  "))

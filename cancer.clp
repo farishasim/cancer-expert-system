@@ -1,19 +1,15 @@
-; (defmethod ask-question ((?question STRING) (?lower INTEGER) (?upper INTEGER))
-;    (printout t ?question " (" ?lower " - " ?upper") ")
-;    (bind ?answer (read))
-;    (if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
-;    (while (or (not (integerp ?answer))
-;               (< ?answer ?lower)
-;               (> ?answer ?upper)) do
+; Clips programe to determine cancer patient
+; Developed by : 
+; 13519050 Faris Hasim Syauqi
+; 13519077 Muhammad Fahmi Alamsyah
+; 13519197 Muhammad Jafar Gundari
 
-;       (bind ?answer (read)))
-;    ?answer)
 
 (defmethod ask-question ((?question STRING))
 	(printout t ?question)
 	(bind ?answer (read))
 	(if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
-	(while (not (integerp ?answer)) do
+	(while (not (numberp ?answer)) do
 		(printout t "Value must be number." crlf)
 		(printout t ?question)
 		(bind ?answer (read)))
@@ -34,12 +30,6 @@
 	(bind ?input (ask-question "Worst radius? "))
 	(assert (worst-radius ?input))	
 )
-
-; function (?nama-rule)
-; while {
-; 	?input <- (?nama-rule (read))
-; }
-; (assert ?input)
 
 (defrule ask-worst-perimeter
     ?mean-concave <- (mean-concave-point ?value)

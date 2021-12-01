@@ -234,7 +234,7 @@
 	(finish 1)
 	=>
 	(retract ?complete)
-	(printout t "Hasil prediksi = Terprediksi kanker payudara" crlf)
+	(printout t "Hasil Prediksi = Terprediksi Kanker Payudara" crlf)
 )
 
 (defrule good-completed-state
@@ -242,7 +242,7 @@
 	(finish 0)
 	=>
 	(retract ?complete)
-	(printout t "Hasil prediksi = Terprediksi tidak terkena kanker payudara" crlf)
+	(printout t "Hasil Prediksi = Terprediksi Tidak Terkena Kanker Payudara" crlf)
 )
 
 ; Jika worst texture <= 30.15
